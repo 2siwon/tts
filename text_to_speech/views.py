@@ -8,8 +8,11 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 
-def save_file():
-    pass
+def save_file(response):
+    response_body = response.read()
+    with open('1111.mp3', 'wb') as f:
+        f.write(response_body)
+    return HttpResponse("TTS mp3 저장")
 
 
 def send_to_naver(request):
@@ -38,10 +41,7 @@ def send_to_naver(request):
         rescode = response.getcode()
 
         if (rescode == 200):
-            response_body = response.read()
-            with open('1111.mp3', 'wb') as f:
-                f.write(response_body)
-            return HttpResponse("TTS mp3 저장")
+            save_file(response)
         else:
             print(f"Error Code: {rescode}")
 
